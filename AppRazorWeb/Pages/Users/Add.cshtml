@@ -1,0 +1,57 @@
+﻿@page
+@model AppRazorWeb.API.Pages.Users.AddModel
+@{
+	var message = ViewData["Message"]?.ToString();
+}
+
+<form method="post">
+	<h1 class="mb-3">Add new User</h1>
+
+	@if (!string.IsNullOrWhiteSpace(message))
+	{
+		<div class="alert alert-success" role="alert">
+			@message
+		</div>
+	}
+
+	<div class="mb-3">
+		<label class="form-label">Name</label>
+		<input type="text" class="form-control" asp-for="UserViewModelRequest.Name" />
+		<span class="text-danger" asp-validation-for="UserViewModelRequest.Name"></span>
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">LastName</label>
+		<input type="text" class="form-control" asp-for="UserViewModelRequest.LastName" />
+		<span class="text-danger" asp-validation-for="UserViewModelRequest.LastName"></span>
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">DNI</label>
+		<input type="text" class="form-control" asp-for="UserViewModelRequest.DNI" />
+		<span class="text-danger" asp-validation-for="UserViewModelRequest.DNI"></span>
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">Age</label>
+		<input type="text" class="form-control" asp-for="UserViewModelRequest.Age" />
+		<span class="text-danger" asp-validation-for="UserViewModelRequest.Age"></span>
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">PhoneNumber</label>
+		<input type="text" class="form-control" asp-for="UserViewModelRequest.PhoneNumber" />
+		<span class="text-danger" asp-validation-for="UserViewModelRequest.PhoneNumber"></span>
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">Email</label>
+		<input type="text" class="form-control" asp-for="UserViewModelRequest.Email" />
+		<span class="text-danger" asp-validation-for="UserViewModelRequest.Email"></span>
+	</div>
+
+	<div class="mb-3">
+		<button type="submit" class="btn btn-primary">Save</button>
+	</div>
+
+</form>

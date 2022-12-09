@@ -1,0 +1,43 @@
+﻿@page
+@model AppRazorWeb.API.Pages.Schedules.AddModel
+@{
+    var message = ViewData["Message"]?.ToString();
+}
+
+<form method="post">
+
+	<h1 class="mb-3">Add new Schedule</h1>
+
+	@if (!string.IsNullOrWhiteSpace(message))
+	{
+		<div class="alert alert-success" role="alert">
+			@message
+		</div>
+	}
+
+	<div class="mb-3">
+		<label class="form-label">Start</label>
+		<input type="time" class="form-control" asp-for="ScheduleViewModel.Start" class="form-control"/>
+		<span class="text-danger" asp-validation-for="ScheduleViewModel.Start"></span>
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">End</label>
+		<input type="time" class="form-control" asp-for="ScheduleViewModel.End" class="form-control" />
+		<span class="text-danger" asp-validation-for="ScheduleViewModel.End"></span>
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">DayOfWeek</label>
+		<input type="number" class="form-control" asp-for="ScheduleViewModel.DayOfWeek" class="form-control" />
+		<span class="text-danger" asp-validation-for="ScheduleViewModel.DayOfWeek"></span>
+	</div>
+	<div class="mb-3">
+		<label class="form-label">ActivityName</label>
+		<input type="text" class="form-control" asp-for="activityViewModel.Name" class="form-control" />
+		<span class="text-danger" asp-validation-for="activityViewModel.Name"></span>
+	</div>
+	<div class="mb-3">
+		<button type="submit" class="btn btn-primary">Save</button>
+	</div>
+	</form>

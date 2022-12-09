@@ -1,0 +1,37 @@
+﻿@page
+@model AppRazorWeb.API.Pages.Schedules.ListModel
+@{
+}
+
+<h1 class="mb-3">List of Schedules</h1>
+
+@if (Model.schedules != null && Model.schedules.Any())
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Start</th>
+				<th>End</th>
+				<th>DayOfWeek</th>
+				<th> </th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var schedule in Model.schedules)
+			{
+				<tr>
+					<td>@schedule.Start</td>
+					<td>@schedule.End</td>
+					<td>@schedule.DayOfWeek</td>
+					<td>
+						<a href="/Schedules/Edit/@schedule.Id" class="btn btn-dark">Edit</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+else
+{
+	<p>We can't found schedules</p>
+}

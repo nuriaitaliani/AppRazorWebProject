@@ -1,0 +1,43 @@
+﻿@page
+@model AppRazorWeb.API.Pages.Activities.ListModel
+@{
+}
+
+<h1 class="mb-3">List of Activities</h1>
+
+@if (Model.activities != null && Model.activities.Any())
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Place</th>
+				<th>DailyLesson</th>
+				<th>StudentName</th>
+				<th>StudentCourse</th>
+				<th> </th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var activity in Model.activities)
+			{
+				<tr>
+					<td>@activity.Name</td>
+					<td>@activity.Description</td>
+					<td>@activity.Place</td>
+					<td>@activity.DailyLesson</td>
+					<td>@activity.StudentName</td>
+					<td>@activity.StudentCouse</td>
+					<td>
+						<a href="/Activities/Edit/@activity.Id" class="btn btn-dark">Edit</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+else
+{
+	<p>We can't found activities</p>
+}

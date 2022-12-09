@@ -1,0 +1,43 @@
+﻿@page
+@model AppRazorWeb.API.Pages.Users.ListModel
+@{
+}
+
+<h1 class="mb-3">List of Users</h1>
+
+@if (Model.users != null && Model.users.Any())
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>LastName</th>
+				<th>DNI</th>
+				<th>Age</th>
+				<th>PhoneNumber</th>
+				<th>Email</th>
+				<th> </th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var user in Model.users)
+			{
+				<tr>
+					<td>@user.Name</td>
+					<td>@user.LastName</td>
+					<td>@user.DNI</td>
+					<td>@user.Age</td>
+					<td>@user.PhoneNumber</td>
+					<td>@user.Email</td>
+					<td>
+						<a href="/Users/Edit/@user.Id" class="btn btn-dark">Edit</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+else
+{
+	<p>We can't found users</p>
+}

@@ -1,0 +1,62 @@
+﻿@page "{id:Guid}"
+@model AppRazorWeb.API.Pages.Activities.EditModel
+@{
+	var message = ViewData["Message"]?.ToString();
+}
+
+<form method="post">
+	<h1 class="mb-3">Edit Activity</h1>
+
+	@if (!string.IsNullOrWhiteSpace(message))
+	{
+		<div class="alert alert-success" role="alert">
+			@message
+		</div>
+	}
+
+	<div class="mb-3">
+		<label class="form-label">Id</label>
+		<input type="text" class="form-control" asp-for="editActivityViewModel.Id" readonly />
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">Name</label>
+		<input type="text" class="form-control" asp-for="editActivityViewModel.Name" />
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">Description</label>
+		<input type="text" class="form-control" asp-for="editActivityViewModel.Description" />
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">Place</label>
+		<input type="text" class="form-control" asp-for="editActivityViewModel.Place" />
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">StudentName</label>
+		<input type="text" class="form-control" asp-for="editActivityViewModel.StudentName" />
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">DailyLesson</label>
+		<input type="text" class="form-control" asp-for="editActivityViewModel.DailyLesson" />
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">StudentCourse</label>
+		<input type="text" class="form-control" asp-for="editActivityViewModel.StudentCourse" />
+	</div>
+
+	<div class=" = mb-3">
+		<button type="submit" class="btn btn-primary" asp-page-handler="Update">
+			Update
+		</button>
+	</div>
+	<div class=" = mb-3 d-flex justify-content-between">
+		<button type="submit" class="btn btn-danger" asp-page-handler="Delete">
+			Delete
+		</button>
+	</div>
+</form>

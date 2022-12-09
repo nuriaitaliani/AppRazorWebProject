@@ -1,0 +1,55 @@
+﻿@page "{id:Guid}"
+@model AppRazorWeb.API.Pages.Users.EditModel
+@{
+    var message = ViewData["Message"]?.ToString();
+}
+
+<form method="post">
+    <h1 class="mb-3">Edit User</h1>
+
+    @if (!string.IsNullOrWhiteSpace(message))
+    {
+        <div class="alert alert-success" role="alert">
+            @message
+        </div>
+    }
+
+    <div class="mb-3">
+        <label class="form-label">Id</label>
+        <input type="text" class="form-control" asp-for="userViewModel.Id" readonly />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input type="text" class="form-control" asp-for="userViewModel.Name" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">LastName</label>
+        <input type="text" class="form-control" asp-for="userViewModel.LastName" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">DNI</label>
+        <input type="text" class="form-control" asp-for="userViewModel.DNI" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Age</label>
+        <input type="text" class="form-control" asp-for="userViewModel.Age" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">PhoneNumber</label>
+        <input type="text" class="form-control" asp-for="userViewModel.PhoneNumber" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="text" class="form-control" asp-for="userViewModel.Email" />
+    </div>
+    <div class=" = mb-3">
+        <button type="submit" class="btn btn-primary" asp-page-handler="Update">
+            Update
+        </button>
+    </div>
+    <div class=" = mb-3 d-flex justify-content-between">
+        <button type="submit" class="btn btn-danger" asp-page-handler="Delete">
+            Delete
+        </button>
+    </div>
+</form>

@@ -1,0 +1,20 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<form method="post">
+	<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+</div>
+
+<div class="mb-3">
+		<a href="/Activities/Add" class="btn btn-dark">Go to Add Activity</a>
+		<a href="/Activities/List" class="btn btn-dark">Go to List Activity</a>
+		<a href="/Users/Add" class="btn btn-dark">Go to Add User</a>
+		<a href="/Users/List" class="btn btn-dark">Go to List User</a>
+		<a href="/Schedules/Add" class="btn btn-dark">Go to Add Schedule</a>
+		<a href="/Schedules/List" class="btn btn-dark">Go to List Schedule</a>
+	</div>
+</form>

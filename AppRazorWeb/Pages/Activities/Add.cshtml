@@ -1,0 +1,57 @@
+﻿@page
+@model AppRazorWeb.API.Pages.Activities.AddModel
+@{
+	var message = ViewData["Message"]?.ToString();
+}
+
+<form method="post">
+
+	<h1 class="mb-3">Add new Activity</h1>
+
+	@if (!string.IsNullOrWhiteSpace(message))
+	{
+		<div class="alert alert-success" role="alert">
+			@message
+		</div>
+	}
+
+	<div class="mb-3">
+		<label class="form-label">Name</label>
+		<input type="text" class="form-control" asp-for="ActivityViewModelRequest.Name" class="form-control"/>
+		<span class="text-danger" asp-validation-for="ActivityViewModelRequest.Name"></span>
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">Description</label>
+		<input type="text" class="form-control" asp-for="ActivityViewModelRequest.Description" class="form-control"/>
+		<span class="text-danger" asp-validation-for="ActivityViewModelRequest.Description"></span>
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">Place</label>
+		<input type="text" class="form-control" asp-for="ActivityViewModelRequest.Place" class="form-control" />
+		<span class="text-danger" asp-validation-for="ActivityViewModelRequest.Place"></span>
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">StudentName</label>
+		<input type="text" class="form-control" asp-for="ActivityViewModelRequest.StudentName" class="form-control" />
+		<span class="text-danger" asp-validation-for="ActivityViewModelRequest.StudentName"></span>
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">DailyLesson</label>
+		<input type="text" class="form-control" asp-for="ActivityViewModelRequest.DailyLesson" class="form-control" />
+		<span class="text-danger" asp-validation-for="ActivityViewModelRequest.DailyLesson"></span>
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">StudentCourse</label>
+		<input type="number" class="form-control" asp-for="ActivityViewModelRequest.StudentCourse" class="form-control" />
+		<span class="text-danger" asp-validation-for="ActivityViewModelRequest.StudentCourse"></span>
+	</div>
+
+	<div class="mb-3">
+		<button type="submit" class="btn btn-primary">Save</button>
+	</div>
+</form>
