@@ -1,15 +1,14 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppRazorWeb.Migrations.Models
 {
-    [Table("userschedule")]
+    [Table("user_schedule")]
     public class UserSchedule
     {
-        [Key]
-        [Column("id", Order = 0)]
-        public Guid Id { get; set; }
+        //No necesario al tener un id compuesto
+        //[Column("id", Order = 0)]
+        //public Guid Id { get; set; }
 
         /// <summary>
         /// User id

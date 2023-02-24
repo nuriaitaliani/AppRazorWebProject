@@ -42,6 +42,7 @@ namespace AppRazorWeb.Migrations.Models
         /// <summary>
         /// Age
         /// </summary>
+        [Required]
         [Column("age", Order = 4)]
         public int Age { get; set; }
 
@@ -49,6 +50,7 @@ namespace AppRazorWeb.Migrations.Models
         /// Phone number
         /// </summary>
         [Required]
+        [Column("phone_number", Order = 5)]
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
 
@@ -61,15 +63,22 @@ namespace AppRazorWeb.Migrations.Models
         public string Email { get; set; }
 
         /// <summary>
+        /// Address
+        /// </summary>
+        [Required]
+        [Column("address", Order = 7)]
+        public string Address { get; set; }
+
+        /// <summary>
         /// Creation date
         /// </summary>
-        [Column("creation_date", Order = 7)]
+        [Column("creation_date", Order = 8)]
         public DateTime CreationDate { get; set; }
 
         /// <summary>
         /// Update date
         /// </summary>
-        [Column("update_date", Order = 8)]
+        [Column("update_date", Order = 9)]
         public DateTime? UpdateDate { get; set; }
 
         //public string FullName

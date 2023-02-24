@@ -164,6 +164,7 @@ namespace AppRazorWeb.Framework.Dataservices
             parameters.Add(nameof(UserWriteModel.Age), user.Age, DbType.Int64);
             parameters.Add(nameof(UserWriteModel.PhoneNumber), user.PhoneNumber, DbType.String);
             parameters.Add(nameof(UserWriteModel.Email), user.Email, DbType.String);
+            parameters.Add(nameof(UserWriteModel.Address), user.Address, DbType.String);
 
             return parameters;
         }

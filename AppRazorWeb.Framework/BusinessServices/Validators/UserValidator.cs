@@ -4,6 +4,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AppRazorWeb.Framework.BusinessService.Models;
 using AppRazorWeb.Framework.Dataservices;
+using System;
+using System.Net.NetworkInformation;
 
 namespace AppRazorWeb.Framework.BusinessService.Validators
 {
@@ -11,10 +13,12 @@ namespace AppRazorWeb.Framework.BusinessService.Validators
     {
 
         public static async Task<IExecutionResult> ValidateUser(UserWriteModel user,
-            IUserDataService userDataService, IDbConnection dbConnection,
+            IUserDataService userDataService,
+            IScheduleDataService scheduleDataService,
+            IDbConnection dbConnection,
             IDbTransaction dbTransaction = null)
         {
-
+            
             #region Mandatory Fields
 
             if (string.IsNullOrWhiteSpace(user.Name))
@@ -55,6 +59,14 @@ namespace AppRazorWeb.Framework.BusinessService.Validators
                     Enums.ErrorType.MandatoryField,
                     nameof(UserHeader.Email),
                     "Attention - The email is mandatory");
+            }
+
+            if (string.IsNullOrWhiteSpace(user.Address))
+            {
+                return new ExecutionResult(
+                    Enums.ErrorType.MandatoryField,
+                    nameof(UserHeader.Address),
+                    "Attention - The address is mandatory");
             }
 
             #endregion Mandatory Fields
@@ -140,8 +152,46 @@ namespace AppRazorWeb.Framework.BusinessService.Validators
                     "Attention - That's an incorrect format");
             }
 
+            //Si la lista de schedules de la tabla de user no es null ni está vacía
+            if (user.Schedules != null &&
+                user.Schedules.Count != 0)
+            {
+                //Recorremos la lista de schedules de la tabla de user
+                foreach (Guid scheduleId in user.Schedules)
+                {
+                    //Si el el getSchedule es null entonces no existen schedules
+                    if (await scheduleDataService.GetSchedule(scheduleId, dbConnection, dbTransaction) == null)
+                    {
+                        return new ExecutionResult(
+                            Enums.ErrorType.InvalidField,
+                            nameof(Schedule),
+                            "Attention - The schedule doesn't exist");
+                    }
+
+                }
+            }
+
             return new ExecutionResult();
 
+        }
+
+        public static async Task<IExecutionResult> ValidateUserOnDelete(Guid userId,
+            IUserScheduleDataService userScheduleDataService,
+            IDbConnection dbConnection, IDbTransaction dbTransaction = null)
+        {
+            //Si la tabla intermedia tiene userId asociados no se podrá eliminar el user
+            if ((await userScheduleDataService.GetUserSchedules(dbConnection, dbTransaction,
+                new Dataservices.Filters.UserScheduleFilters()
+                {
+                    UserId = userId,
+                })).Count != 0)
+            {
+                return new ExecutionResult(
+                    Enums.ErrorType.RelatedRecord,
+                    nameof(User),
+                    "Attention - You can't delete a user if it has an associated schedule");
+            }
+            return new ExecutionResult();
         }
 
     }

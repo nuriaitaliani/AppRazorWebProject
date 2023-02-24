@@ -46,7 +46,6 @@ namespace AppRazorWeb.Framework.BusinessService
             {
                 _connection.Open();
 
-
                 IExecutionResult result = await ActivityValidator.ValidateActivity(activity, _activityDataService, _connection);
                 if (!result.Success)
                 {

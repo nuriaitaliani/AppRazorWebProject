@@ -8,6 +8,9 @@ namespace AppRazorWeb.Migrations.DataAccessLayer.Common
         public static void GetTableDefinitions(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Models.UserSchedule>()
+                .HasKey(e => new { e.ScheduleId, e.UserId });
+
+            modelBuilder.Entity<Models.UserSchedule>()
                 .HasOne(e => e.Schedule)
                 .WithMany(e => e.UserScheduleRelation)
                 .HasForeignKey(e => e.ScheduleId)

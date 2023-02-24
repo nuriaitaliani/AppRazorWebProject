@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace AppRazorWeb.Framework.BusinessService.Models
 {
@@ -14,14 +15,15 @@ namespace AppRazorWeb.Framework.BusinessService.Models
 
         public TimeSpan End { get; set; }
 
+        public Guid ActivityId { get; set; }
+
         public DayOfWeek DayOfWeek { get; set; }
 
     }
 
     public class ScheduleWriteModel : ScheduleHeader
     {
-
-        public Guid ActivityId { get; set; }
+        public List<Guid> Users { get; set; }
 
         public Dataservices.Models.ScheduleWriteModel ToDataServiceModel()
         {
@@ -42,6 +44,14 @@ namespace AppRazorWeb.Framework.BusinessService.Models
 
         public ActivityHeader Activity { get; set; }
 
+        public List<UserSchedule_Schedule> UserSchedules { get; set; }
+    }
+
+    public class UserSchedule_Schedule
+    {
+        public Guid UserId { get; set; }
+        public Guid ActivityId { get; set; }
+        public string ActivityName { get; set; }
     }
 
 }

@@ -30,11 +30,12 @@ namespace AppRazorWeb.Framework.Repositories.SqlServer
 INSERT INTO ""user""
             (id, name, last_name,
             dni, age, phone_number,
-            email)
+            email,address)
 VALUES      (@{nameof(InsertModel.Id)}, @{nameof(InsertModel.Name)},
             @{nameof(InsertModel.LastName)}, @{nameof(InsertModel.DNI)},
             @{nameof(InsertModel.Age)}, @{nameof(InsertModel.PhoneNumber)},
-            @{nameof(InsertModel.Email)})";
+            @{nameof(InsertModel.Email)},
+            @{nameof(InsertModel.Address)})";
         }
 
         #endregion Inserts
@@ -112,7 +113,7 @@ VALUES      (@{nameof(InsertModel.Id)}, @{nameof(InsertModel.Name)},
 SELECT      ""user"".id AS ""{nameof(ReadModel.Id)}"", ""user"".name AS ""{nameof(ReadModel.Name)}"",
             ""user"".last_name AS ""{nameof(ReadModel.LastName)}"", ""user"".dni AS ""{nameof(ReadModel.DNI)}"",
             ""user"".age AS ""{nameof(ReadModel.Age)}"", ""user"".phone_number AS ""{nameof(ReadModel.PhoneNumber)}"",
-            ""user"".email AS ""{nameof(ReadModel.Email)}""
+            ""user"".email AS ""{nameof(ReadModel.Email)}"",""user"".address AS ""{nameof(ReadModel.Address)}""
 FROM        ""user""";
         }
 
@@ -130,6 +131,7 @@ UPDATE  ""user""
 SET     name = @{nameof(UpdateModel.Name)}, last_name = @{nameof(UpdateModel.LastName)},
         dni = @{nameof(UpdateModel.DNI)}, age = @{nameof(UpdateModel.Age)},
         phone_number = @{nameof(UpdateModel.PhoneNumber)}, email = @{nameof(UpdateModel.Email)},
+        address = @{nameof(UpdateModel.Address)},
         update_date = GETUTCDATE()
 WHERE   id = @{nameof(UpdateModel.Id)}";
         }

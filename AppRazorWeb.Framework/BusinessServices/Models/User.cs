@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace AppRazorWeb.Framework.BusinessService.Models
 {
@@ -22,10 +23,13 @@ namespace AppRazorWeb.Framework.BusinessService.Models
 
         public string Email { get; set; }
 
+        public string Address { get; set; }
+
     }
 
     public class UserWriteModel : UserHeader
     {
+        public List<Guid> Schedules { get; set; }
 
         public Dataservices.Models.UserWriteModel ToDataServiceModel()
         {
@@ -37,7 +41,8 @@ namespace AppRazorWeb.Framework.BusinessService.Models
                 DNI = DNI,
                 Age = Age,
                 PhoneNumber = PhoneNumber,
-                Email = Email
+                Email = Email,
+                Address = Address
             };
         }
 
@@ -45,7 +50,14 @@ namespace AppRazorWeb.Framework.BusinessService.Models
 
     public class User : UserHeader
     {
-
+        public List<UserSchedule_User> UserSchedules { get; set; }
     }
 
+
+    public class UserSchedule_User
+    {
+        public Guid ScheduleId { get; set; }
+        public Guid ActivityId { get; set; }
+        public string ActivityName { get; set; }
+    }
 }

@@ -19,6 +19,8 @@ namespace AppRazorWeb.Framework.Dataservices.Models
 
         public string Email { get; set; }
 
+        public string Address { get; set; }
+
     }
 
     public class UserReadModel : UserWriteModel

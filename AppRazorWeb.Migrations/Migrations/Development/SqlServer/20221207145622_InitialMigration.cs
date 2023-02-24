@@ -73,7 +73,7 @@ namespace AppRazorWeb.Migrations.Migrations.Development.SqlServer
                 });
 
             migrationBuilder.CreateTable(
-                name: "userschedule",
+                name: "user_schedule",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -102,19 +102,19 @@ namespace AppRazorWeb.Migrations.Migrations.Development.SqlServer
 
             migrationBuilder.CreateIndex(
                 name: "IX_userschedule_schedule_id",
-                table: "userschedule",
+                table: "user_schedule",
                 column: "schedule_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_userschedule_user_id",
-                table: "userschedule",
+                table: "user_schedule",
                 column: "user_id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "userschedule");
+                name: "user_schedule");
 
             migrationBuilder.DropTable(
                 name: "schedule");

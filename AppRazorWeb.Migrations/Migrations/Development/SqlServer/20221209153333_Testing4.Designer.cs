@@ -197,7 +197,7 @@ namespace AppRazorWeb.Migrations.Migrations.Development.SqlServer
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("userschedule");
+                    b.ToTable("user_schedule");
                 });
 
             modelBuilder.Entity("AppRazorWeb.Migrations.Models.Schedule", b =>

@@ -27,6 +27,9 @@ namespace AppRazorWeb.Migrations.DataAccessLayer.Common
                 entity.Property(b => b.Email)
                 .HasMaxLength(56)
                 .IsRequired();
+                entity.Property(b => b.Address)
+                .HasMaxLength(56)
+                .IsRequired();
                 entity.Property(b => b.CreationDate)
                 .HasDefaultValueSql("GETUTCDATE()");
             });

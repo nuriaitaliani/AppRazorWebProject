@@ -53,6 +53,8 @@ namespace AppRazorWeb.Framework.Miscellaneous
             new BusinessService.ScheduleBusinessService(
                 z.GetRequiredService<Dataservices.IScheduleDataService>(),
                 z.GetRequiredService<Dataservices.IActivityDataService>(),
+                z.GetRequiredService<Dataservices.IUserScheduleDataService>(),
+                z.GetRequiredService<Dataservices.IUserDataService>(),
                 connectionString));            
         }
 

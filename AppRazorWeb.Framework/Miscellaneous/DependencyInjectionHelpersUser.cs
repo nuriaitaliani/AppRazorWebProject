@@ -55,7 +55,9 @@ namespace AppRazorWeb.Framework.Miscellaneous
             services.TryAddTransient<BusinessService.IUserBusinessService>(z =>
             new BusinessService.UserBusinessService(
                 z.GetRequiredService<Dataservices.IUserDataService>(),
-                connectionString));
+                connectionString,
+                z.GetRequiredService<Dataservices.IUserScheduleDataService>(),
+                z.GetRequiredService<Dataservices.IScheduleDataService>()));
         }
 
         #endregion User

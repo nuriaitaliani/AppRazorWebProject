@@ -1,16 +1,15 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
+﻿using AppRazorWeb.Framework.BusinessService.Models;
+using AppRazorWeb.Framework.BusinessService.Validators;
+using AppRazorWeb.Framework.Dataservices;
+using AppRazorWeb.Framework.Dataservices.Filters;
+using AppRazorWeb.Framework.Helpers;
+using Microsoft.Data.SqlClient;
 using ResultCommunication;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using AppRazorWeb.Framework.BusinessService.Models;
-using AppRazorWeb.Framework.BusinessService.Validators;
-using AppRazorWeb.Framework.Dataservices;
-using AppRazorWeb.Framework.Dataservices.Filters;
-using AppRazorWeb.Framework.Helpers;
 
 namespace AppRazorWeb.Framework.BusinessService
 {
@@ -21,17 +20,25 @@ namespace AppRazorWeb.Framework.BusinessService
 
         private readonly IScheduleDataService _scheduleDataService;
         private readonly IActivityDataService _activityDataService;
+        private readonly IUserScheduleDataService _userScheduleDataService;
+        private readonly IUserDataService _userDataService;
         private readonly SqlConnection _connection;
+        private readonly SqlTransaction _transaction;
 
         #endregion Fields
 
         #region Constructor
 
-        public ScheduleBusinessService(IScheduleDataService scheduleDataService, IActivityDataService activityDataService,
+        public ScheduleBusinessService(IScheduleDataService scheduleDataService,
+            IActivityDataService activityDataService,
+            IUserScheduleDataService userScheduleDataService,
+            IUserDataService userDataService,
             string connectionString)
         {
             _scheduleDataService = scheduleDataService;
             _activityDataService = activityDataService;
+            _userScheduleDataService = userScheduleDataService;
+            _userDataService = userDataService;
             _connection = new SqlConnection(connectionString);
         }
 
@@ -46,9 +53,11 @@ namespace AppRazorWeb.Framework.BusinessService
             try
             {
                 _connection.Open();
+                _connection.BeginTransaction();
 
                 IExecutionResult result = await ScheduleValidator.ValidateSchedule(schedule, _scheduleDataService,
-                    _activityDataService, _connection);
+                    _activityDataService, _userDataService, _userScheduleDataService, _connection, _transaction);
+
                 if (!result.Success)
                 {
                     return result;
@@ -59,13 +68,30 @@ namespace AppRazorWeb.Framework.BusinessService
                     schedule.Id = Guid.NewGuid();
                 }
 
-                await _scheduleDataService.InsertSchedule(schedule.ToDataServiceModel(), _connection);
+                await _scheduleDataService.InsertSchedule(schedule.ToDataServiceModel(), _connection, _transaction);
+
+                if (schedule.Users != null &&
+                    schedule.Users.Count != 0)
+                {
+                    foreach (Guid userId in schedule.Users)
+                    {
+                        await _userScheduleDataService.InsertUserSchedule(new Dataservices.Models.UserScheduleReadModel()
+                        {
+                            UserId = userId,
+                            ScheduleId = schedule.Id
+                        }, _connection, _transaction);
+                    }
+                }
+
+                _transaction.Commit();
 
                 return new ExecutionResult();
 
             }
             catch (Exception exception)
             {
+                _transaction.Rollback();
+
                 return new ExecutionResult(
                     Enums.ErrorType.GeneralException,
                     exception.GetType().ToString(),
@@ -86,6 +112,7 @@ namespace AppRazorWeb.Framework.BusinessService
             try
             {
                 _connection.Open();
+                _connection.BeginTransaction();
 
                 if (await _scheduleDataService.GetSchedule(scheduleId, _connection) == null)
                 {
@@ -95,13 +122,18 @@ namespace AppRazorWeb.Framework.BusinessService
                         "Attention - The schedule doesn't exist");
                 }
 
-                await _scheduleDataService.DeleteSchedule(scheduleId, _connection);
+                await _userScheduleDataService.DeleteUserScheduleByScheduleId(scheduleId, _connection, _transaction);
+                await _scheduleDataService.DeleteSchedule(scheduleId, _connection, _transaction);
+
+                _transaction.Commit();
 
                 return new ExecutionResult();
 
             }
             catch (Exception exception)
             {
+                _transaction.Rollback();
+
                 return new ExecutionResult(
                     Enums.ErrorType.GeneralException,
                     exception.GetType().ToString(),
@@ -123,23 +155,14 @@ namespace AppRazorWeb.Framework.BusinessService
             {
                 _connection.Open();
 
-                Dataservices.Models.ScheduleReadModel dataServiceSchedule = await _scheduleDataService.GetSchedule(scheduleId, _connection);
+                IExecutionResult result = await ScheduleHelper.GetSchedule(scheduleId, _scheduleDataService, _activityDataService, _userScheduleDataService, _connection);
 
-                if (dataServiceSchedule == null)
+                if (!result.Success)
                 {
-                    return new ExecutionResult(
-                        Enums.ErrorType.NotFound,
-                        nameof(ScheduleHeader),
-                        "Attention - The schedule doesn't exist");
+                    return result;
                 }
 
-                Schedule schedule = dataServiceSchedule.ToBusinessServiceModel();
-
-                schedule.Activity = (await _activityDataService
-                    .GetActivity(dataServiceSchedule.ActivityId, _connection))
-                    .ToBusinessServiceHeaderModel();
-
-                return new ExecutionResult(schedule);
+                return new ExecutionResult(result.Result);
 
             }
             catch (Exception exception)
@@ -189,6 +212,7 @@ namespace AppRazorWeb.Framework.BusinessService
             try
             {
                 _connection.Open();
+                _connection.BeginTransaction();
 
                 if (await _scheduleDataService.GetSchedule(schedule.Id, _connection) == null)
                 {
@@ -199,19 +223,42 @@ namespace AppRazorWeb.Framework.BusinessService
                 }
 
                 IExecutionResult result = await ScheduleValidator.ValidateSchedule(schedule, _scheduleDataService,
-                    _activityDataService, _connection);
+                    _activityDataService, _userDataService, _userScheduleDataService, _connection, _transaction);
+
                 if (!result.Success)
                 {
                     return result;
                 }
 
-                await _scheduleDataService.UpdateSchedule(schedule.ToDataServiceModel(), _connection);
+                await _scheduleDataService.UpdateSchedule(schedule.ToDataServiceModel(), _connection, _transaction);
+
+                if (schedule.Users !=null &&
+                    schedule.Users.Count != 0)
+                {
+                    foreach (Guid userId in schedule.Users)
+                    {
+                        await _userScheduleDataService.DeleteUserScheduleByScheduleId(schedule.Id, _connection, _transaction);
+
+                        if (schedule.Users.Contains(userId))
+                        {
+                            await _userScheduleDataService.InsertUserSchedule(new Dataservices.Models.UserScheduleWriteModel()
+                            {
+                                UserId = userId,
+                                ScheduleId = schedule.Id,
+                            }, _connection, _transaction);
+                        }
+                    }
+                }
+
+                _transaction.Commit();
 
                 return new ExecutionResult();
 
             }
             catch (Exception exception)
             {
+                _transaction.Rollback();
+
                 return new ExecutionResult(
                     Enums.ErrorType.GeneralException,
                     exception.GetType().ToString(),

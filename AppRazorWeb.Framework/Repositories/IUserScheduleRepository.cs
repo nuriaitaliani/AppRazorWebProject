@@ -5,7 +5,9 @@
 
         #region Deletes
 
-        string GetDeleteUserSchedule();
+        string GetDeleteUserScheduleByUserId();
+
+        string GetDeleteUserScheduleByScheduleId();
 
         #endregion Deletes
 
@@ -16,8 +18,6 @@
         #endregion Inserts
 
         #region Selects
-
-        string GetSelectUserSchedule();
 
         string GetSelectUsersSchedules(bool filterByUserId = false,
             bool filterByUserName = false, bool filterByScheduleId = false,
@@ -30,12 +30,6 @@
         #endregion Helpers
 
         #endregion Selects
-
-        #region Updates
-
-        string GetUpdateUserSchedule();
-
-        #endregion Updates
 
     }
 }
